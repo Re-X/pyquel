@@ -1,0 +1,4 @@
+# Excluded Directories
+__pycache__/
+
+# Excluded Files
