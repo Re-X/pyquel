@@ -15,13 +15,25 @@ def Connect():
     print  ("\t\t\t\t██║     ██║   ██║██║  ███╗██║██╔██╗ ██║")
     print  ("\t\t\t\t██║     ██║   ██║██║   ██║██║██║╚██╗██║")
     print  ("\t\t\t\t███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║")
-    print  ("\t\t\t\t╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝\n\n\n")
+    print  ("\t\t\t\t╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝\n\n")
     while 1:
-        config['username'] = input("Enter username: ")
-        config['password'] = input("Enter password: ")
-        hosttemp           = input("Enter host (default - localhost): ")
-        if(hosttemp != ''):
-            config['host'] = hosttemp
+        print('\n')
+        user = input("Enter username: ")
+        if(user != ''):
+            config['username'] = user
+        else:
+            print('->', config['username'], sep = '')
+        password = input("Enter password: ")
+        if(password != ''):
+            config['password'] = password
+        else:
+            print('->', config['password'], sep = '')
+        host = input("Enter host : ")
+        if(host != ''):
+            config['host'] = host
+        else:
+            print('->', config['host'], sep = '')
+        
         try:
             connection = mysql.connector.connect(**config)
             break
@@ -31,4 +43,28 @@ def Connect():
             elif err.errno == 2003:
                 print("\nERROR: Can't connect to MySQL server on", config['host'])
     return connection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
