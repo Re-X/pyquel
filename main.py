@@ -19,5 +19,13 @@ cursor = connection.cursor(raw = True)
 
 print("connected to MySQL server on", config['host'], '\n\n')
 
-input(">>> ")
+while 1:
+    query = input(">>> ")
+    cursor.execute(query)
+    if(cursor.with_rows):
+        print('\n')
+        for i in cursor:
+            print(i)
+        print("\n")
+
 
