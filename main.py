@@ -13,6 +13,8 @@ import setup
 from libs import *
 from mysql.connector import FieldType
 import mysql.connector
+from time import perf_counter as now
+from libs import *
 
 
 connection = setup.Connect()
@@ -20,20 +22,15 @@ connection = setup.Connect()
 print("Connection established.")
 os.system("CLS")
 
-cursor = connection.cursor(raw = True)
+cursor = connection.cursor()
 
 print("connected to MySQL server on", setup.config['host'], '\n\n')
 
-def echo(data):
-    print('\n')
-    for i in data:
-        for j in i:
-            print(j.decode("utf-8"), end = '')
-        print()
-    print("\n")
+main_cursor = cursor
 
 while 1:
     query = input(">>> ")
+    
     try:
         cursor.execute(query)
     except mysql.connector.Error as err:
@@ -41,6 +38,7 @@ while 1:
         continue
       
     if(cursor.with_rows):
-        data = cursor.fetchall()
-        echo(data)
-
+        T0 = now()
+        echo(cursor)
+        print("-> executed in {0} secs.\n".format(now()-T0))
+        
