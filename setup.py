@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import errorcode
+from libs import *
 
 config = {
   'username': 'root',
@@ -37,6 +38,19 @@ def Connect():
                 print("\nERROR: ACCESS DENIED.\n")
             elif err.errno == 2003:
                 print("\nERROR: Can't connect to MySQL server on", config['host'])
+
+                b = input("Start mysql service? ")
+                if(b in ('Y', "Yes", "True")):
+                    if not isUserAdmin():
+                        print("Need elevated privilages.")
+                        runAsAdmin()
+                        exit()
+                    ver = eval(input("mysql version: "))
+                    if(type(ver)==float):
+                        ver = int(ver*10)
+                    os.system("net start mysql{0}".format(ver))
+                    connection = mysql.connector.connect(**config)
+                    break
     return connection
 
 
