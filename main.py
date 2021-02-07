@@ -28,11 +28,23 @@ print("connected to MySQL server on", setup.config['host'], '\n\n')
 
 main_cursor = cursor
 
+pad   = ">>> "
+query = ""
+
 while 1:
-    query = input(">>> ")
-    
+    query += input(pad)
+    if not query:
+        continue
+    if (query[-1] != ';'):
+        query += " "
+        pad = " "*8 + "-> "
+        continue
+    else:
+        pad = ">>> "
+        
     try:
         cursor.execute(query)
+        query = ""
     except mysql.connector.Error as err:
         print("ERROR: {}".format(err))
         continue
