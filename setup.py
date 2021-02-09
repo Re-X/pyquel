@@ -7,7 +7,9 @@ config = {
   'password': 'root',
   'host': '127.0.0.1',
   'raise_on_warnings': True
-}   
+}
+
+ver = 80
 
 def Connect():
     global config
@@ -40,14 +42,21 @@ def Connect():
                 print("\nERROR: Can't connect to MySQL server on", config['host'])
 
                 b = input("Start mysql service? ")
-                if(b in ('Y', "Yes", "True")):
+                if(b in ('Y', "Yes", "True", 'y', 'yes')):
                     if not isUserAdmin():
                         print("Need elevated privilages.")
                         runAsAdmin()
                         exit()
-                    ver = eval(input("mysql version: "))
-                    if(type(ver)==float):
-                        ver = int(ver*10)
+                    try:
+                        ver = eval(input("mysql version: "))
+                        if(type(ver)==float):
+                            ver = int(ver*10)
+                        config['version'] = ver
+
+                    except:
+                        ver = 80
+                        print('->', ver, sep = '')
+                    
                     os.system("net start mysql{0}".format(ver))
                     connection = mysql.connector.connect(**config)
                     break

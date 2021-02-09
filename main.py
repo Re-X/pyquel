@@ -35,6 +35,13 @@ while 1:
     query += input(pad)
     if not query:
         continue
+    if (query in ("exit, q, quit")):
+        break
+    if (query in ('cls', 'clear', 'clearscreen', 'clrscr')):
+        os.system('CLS')
+        query = ''
+        continue
+    
     if (query[-1] != ';'):
         query += " "
         pad = " "*8 + "-> "
@@ -47,10 +54,12 @@ while 1:
         query = ""
     except mysql.connector.Error as err:
         print("ERROR: {}".format(err))
+        query = ""
         continue
       
     if(cursor.with_rows):
         T0 = now()
         echo(cursor)
         print("-> executed in {0} secs.\n".format(now()-T0))
-        
+
+os.system("net stop mysql{0}".format(setup.ver))
