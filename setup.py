@@ -2,17 +2,12 @@ import mysql.connector
 from mysql.connector import errorcode
 from libs import *
 
-config = {
-  'username': 'root',
-  'password': 'root',
-  'host': '127.0.0.1',
-  'raise_on_warnings': True
-}
-
-ver = 80
+setup_config = (open('setup.config')).read()
+exec(setup_config)
 
 def Connect():
     global config
+    global mysql_version
     
     while 1:
         print('\n')
@@ -43,21 +38,17 @@ def Connect():
 
                 b = input("Start mysql service? ")
                 if(b in ('Y', "Yes", "True", 'y', 'yes')):
-                    if not isUserAdmin():
-                        print("Need elevated privilages.")
-                        runAsAdmin()
-                        exit()
+                    runAsAdmin()
+                    
                     try:
                         ver = eval(input("mysql version: "))
                         if(type(ver)==float):
-                            ver = int(ver*10)
-                        config['version'] = ver
-
+                            mysql_version = int(ver*10)
+                            
                     except:
-                        ver = 80
-                        print('->', ver, sep = '')
+                        print('->', mysql_version, sep = '')
                     
-                    os.system("net start mysql{0}".format(ver))
+                    os.system("net start mysql{0}".format(mysql_version))
                     connection = mysql.connector.connect(**config)
                     break
     return connection

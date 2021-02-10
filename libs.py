@@ -17,6 +17,12 @@ def isUserAdmin():
     
 def runAsAdmin(cmdLine=None, wait=False):
 
+    if(isUserAdmin()):
+        print("User is admin.")
+        return 0
+
+    print("Need elevated privilages.")
+    
     import win32api, win32con, win32event, win32process
     from win32com.shell.shell import ShellExecuteEx
     from win32com.shell import shellcon
@@ -46,6 +52,7 @@ def runAsAdmin(cmdLine=None, wait=False):
                               lpVerb=lpVerb,
                               lpFile=cmd,
                               lpParameters=params)
+    exit()
 
 def echo(cursor):
     print('\n')
