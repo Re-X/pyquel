@@ -35,22 +35,24 @@ def Connect():
                 print("\nERROR: ACCESS DENIED.\n")
             elif err.errno == 2003:
                 print("\nERROR: Can't connect to MySQL server on", config['host'])
-
-                b = input("Start mysql service? ")
-                if(b in ('Y', "Yes", "True", 'y', 'yes')):
-                    runAsAdmin()
-                    
-                    try:
-                        ver = eval(input("mysql version: "))
-                        if(type(ver)==float):
-                            mysql_version = int(ver*10)
-                            
-                    except:
-                        print('->', mysql_version, sep = '')
-                    
-                    os.system("net start mysql{0}".format(mysql_version))
-                    connection = mysql.connector.connect(**config)
-                    break
+                if(config['host'] in ('127.0.0.1', 'localhost')):
+                    b = input("Start mysql service? ")
+                    if(b in ('Y', "Yes", "True", 'y', 'yes')):
+                        runAsAdmin()
+                        
+                        try:
+                            ver = eval(input("mysql version: "))
+                            if(type(ver)==float):
+                                mysql_version = int(ver*10)
+                                
+                        except:
+                            print('->', mysql_version, sep = '')
+                        
+                        os.system("net start mysql{0}".format(mysql_version))
+                        connection = mysql.connector.connect(**config)
+                        break
+            else:
+                print("\nERROR: Can't connect to MySQL server on", config['host'])
     return connection
 
 
