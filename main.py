@@ -33,19 +33,22 @@ query = ""
 
 while 1:
     query += input(pad)
+    query = query.lower()
+    
     if not query:
-        continue
-    if (query in ("exit, q, quit")):
-        break
-    if (query in ('cls', 'clear', 'clearscreen', 'clrscr')):
-        os.system('CLS')
-        query = ''
         continue
     
     if (query[-1] != ';'):
-        query += " "
-        pad = " "*8 + "-> "
-        continue
+        if (query in ("exit, q, quit")):
+            break
+        elif (query in ('cls', 'clear', 'clearscreen', 'clrscr')):
+            os.system('CLS')
+            query = ''
+            continue
+        else:
+            query += " "
+            pad = " "*8 + "-> "
+            continue
     else:
         pad = ">>> "
         

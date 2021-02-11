@@ -4,13 +4,12 @@ def isUserAdmin():
 
     if os.name == 'nt':
         import ctypes
-        # WARNING: requires Windows XP SP2 or higher!
         try:
             return ctypes.windll.shell32.IsUserAnAdmin()
         except:
-            traceback.print_exc()
             print ("Admin check failed, assuming not an admin.")
             return False
+        
     elif os.name == 'posix':
         # Check for root on Posix
         return os.getuid() == 0
@@ -27,31 +26,17 @@ def runAsAdmin(cmdLine=None, wait=False):
     from win32com.shell.shell import ShellExecuteEx
     from win32com.shell import shellcon
 
-    python_exe = sys.executable
+    script = sys.argv[0] #Script path
+        
+    cmd = '"%s"' % sys.executable #python-exe path
 
-    if cmdLine is None:
-        cmdLine = [python_exe] + sys.argv
-    cmd = '"%s"' % (cmdLine[0],)
-    # XXX TODO: isn't there a function or something we can call to massage command line params?
-    params = " ".join(['"%s"' % (x,) for x in cmdLine[1:]])
+    params = '"%s"' % script
     cmdDir = ''
     showCmd = win32con.SW_SHOWNORMAL
-    #showCmd = win32con.SW_HIDE
     lpVerb = 'runas'  # causes UAC elevation prompt.
 
-    # print "Running", cmd, params
+    win32api.ShellExecute(0, lpVerb, cmd, params, cmdDir, showCmd)
 
-    # ShellExecute() doesn't seem to allow us to fetch the PID or handle
-    # of the process, so we can't get anything useful from it. Therefore
-    # the more complex ShellExecuteEx() must be used.
-
-    # procHandle = win32api.ShellExecute(0, lpVerb, cmd, params, cmdDir, showCmd)
-
-    procInfo = ShellExecuteEx(nShow=showCmd,
-                              fMask=shellcon.SEE_MASK_NOCLOSEPROCESS,
-                              lpVerb=lpVerb,
-                              lpFile=cmd,
-                              lpParameters=params)
     exit()
 
 def echo(cursor):
