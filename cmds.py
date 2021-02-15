@@ -89,23 +89,34 @@ def DELETE(condition):
     print()
     return query
 
-def ECHO(args):
+def ECHO(args = ['*']):
+    clauses = ('WHERE', 'HAVING', 'GROUP BY', 'ORDER BY')
     args = ' '.join(args)
     args = args.split(',')
     args = ' '.join(args)
-    args = args.split('where')
+
+    for clause in clauses:
+        if(args.find(clause) != -1):
+            args = args.split(clause)
+            break
+    
+    fields = (args[0].strip()).split()
+    fields = ', '.join(fields)
+    if(not fields.strip()):
+        fields = '*'
     try:
-        fields = (args[0].strip()).split()
-        fields = ', '.join(fields)
         conditions = (args[1].strip()).split()
         conditions = ' '.join(conditions)
     except:
         conditions = ""
+        
     if(conditions):
-        query = "SELECT {1} FROM {0} WHERE {2};".format(table, fields, conditions)
+        query = "SELECT {1} FROM {0} {2} {3};".format(table, fields, clause, conditions)
     else:
         query = "SELECT {1} FROM {0};".format(table, fields)
+        
     return query
+
 
 commands = {
                "create table": CREATE_TABLE,
@@ -126,7 +137,8 @@ def execute(query):
     
 def COMMAND(cmd):
     global table
-        
+
+    cmd = cmd.upper()
     if(cmd not in commands.keys()):
         cmd = cmd.split( )
         try:

@@ -9,12 +9,12 @@ print("\t\t\t╚═╝        ╚═╝    ╚══▀▀═╝  ╚═══�
 
 
 import os
-import setup
-from libs import *
-from mysql.connector import FieldType
-import mysql.connector
 from time import perf_counter as now
 
+import mysql.connector
+
+import setup
+from libs import *
 import cmds
 
 connection = setup.Connect()
