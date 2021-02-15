@@ -4,7 +4,7 @@ call external commands with '@' prefix
 case insensitive.
 
 command-syntax:
-@[table-name] cmd
+@[table-name] [cmd]
 //with no semicolon
 
 cmds:
@@ -24,4 +24,5 @@ eg: @table-name select //shows full table
 eg: @table-name select field1, field2,.... clause 1, clause 2,.... // aakhir kyun bnaya ye?
 
 Delete:
-eg: @table-name delete column value //deletes records with specified column values
+eg: @table-name delete [column] [value] //deletes records with specified column values
+like: @emp delete empid 69420 
