@@ -24,6 +24,8 @@ eg: @table-name add 69 stuff
 
 eg: @table-name add 69
 
+eg: @table-name add //to add indefinetely until '' value is given to a field. 
+
 Echo/Select:
 
 eg: @table-name echo //shows full table
