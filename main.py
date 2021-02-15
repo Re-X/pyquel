@@ -73,4 +73,3 @@ while 1:
         echo(cursor)
         print("-> executed in {0} secs.\n".format(now()-T0))
 
-os.system("net stop mysql{0}".format(setup.mysql_version))
