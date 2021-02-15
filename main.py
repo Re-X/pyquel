@@ -14,8 +14,8 @@ from libs import *
 from mysql.connector import FieldType
 import mysql.connector
 from time import perf_counter as now
-from libs import *
 
+import cmds
 
 connection = setup.Connect()
 
@@ -26,20 +26,28 @@ cursor = connection.cursor()
 
 print("connected to MySQL server on", setup.config['host'], '\n\n')
 
-main_cursor = cursor
+cmds.cursor = cursor
 
 pad   = ">>> "
 query = ""
 
 while 1:
     query += input(pad)
-    query = query.lower()
     
     if not query:
         continue
     
     if (query[-1] != ';'):
-        if (query in ("exit, q, quit")):
+        if(query[0] == '@'):
+            query = query[1:]
+            cmd = cmds.COMMAND(query)
+            if(cmd):
+                query = cmd
+            else:
+                query = ""
+                continue
+                
+        elif (query in ("exit, q, quit")):
             break
         elif (query in ('cls', 'clear', 'clearscreen', 'clrscr')):
             os.system('CLS')
@@ -56,7 +64,7 @@ while 1:
         cursor.execute(query)
         query = ""
     except mysql.connector.Error as err:
-        print("ERROR: {}".format(err))
+        print("ERROR: {}\n".format(err))
         query = ""
         continue
       
