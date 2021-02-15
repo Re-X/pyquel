@@ -4,7 +4,7 @@ call external commands with '@' prefix
 case insensitive.
 
 command-syntax:
-@[table-name] <cmd>
+@[table-name] cmd
 with no semicolon
 
 cmds:
