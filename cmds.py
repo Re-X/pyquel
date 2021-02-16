@@ -8,7 +8,11 @@ def CREATE_TABLE():
         query += input("Table name: ")
         
     query += "( "
-    n = int(input("Degree: "))
+    try:
+        n = int(input("Degree: "))
+    except Exception as e:
+        print(e)
+        return 0
     
     for i in range(1, n+1):
         print()
@@ -89,12 +93,27 @@ def DELETE(condition):
     print()
     return query
 
+def UPDATE(args):
+    args = ' '.join(args)
+    args = args.split(',')
+    if(len(args)>1):
+        condition = ' and '.join(args[:-1])
+        args = (args[-1]).split('set')
+        condition += ' and ' + args[0]
+    else:
+        args = (args[-1]).split('set')
+        condition = args[0]
+        
+    value = args[1].strip()
+    query = "UPDATE {0} SET {1} WHERE {2};".format(table, value, condition)
+    return query
+
 def ECHO(args = ['*']):
     clauses = ('WHERE', 'HAVING', 'GROUP BY', 'ORDER BY')
     args = ' '.join(args)
     args = args.split(',')
     args = ' '.join(args)
-
+    args = args.upper()
     for clause in clauses:
         if(args.find(clause) != -1):
             args = args.split(clause)
@@ -123,7 +142,8 @@ commands = {
                "ADD": ADD_RECORDS,
                "DELETE": DELETE,
                "SELECT": ECHO,
-               "ECHO": ECHO
+               "ECHO": ECHO,
+               "UPDATE": UPDATE
            }
 
 cursor = None
@@ -138,16 +158,15 @@ def execute(query):
 def COMMAND(cmd):
     global table
 
-    cmd = cmd.upper()
-    if(cmd not in commands.keys()):
-        cmd = cmd.split( )
+    if(cmd.upper() not in commands.keys()):
+        cmd = cmd.split()
         try:
             table = cmd[0]
             try:
                 args = cmd[2:]
             except:
                 args = 0
-            cmd = (cmd[1]).lower()
+            cmd = (cmd[1]).upper()
             if(args):
                 query = commands[cmd](args)
             else:
@@ -156,9 +175,9 @@ def COMMAND(cmd):
             return query
         except:
             table = None
-            print("Unidentified external command")
+            print('Unidentified external command\n')
             return 0
     else:
-        query = commands[cmd]()
+        query = commands[cmd.upper()]()
         return query
 

@@ -44,8 +44,14 @@ while 1:
             if(cmd):
                 query = cmd
             else:
-                query = ""
-                continue
+                try:
+                    eval(query)
+                    print()
+                    continue
+                except:
+                    query = ''
+                    continue
+                
                 
         elif (query in ("exit, q, quit")):
             break
@@ -62,6 +68,7 @@ while 1:
         
     try:
         cursor.execute(query)
+        #connection.commit()
         query = ""
     except mysql.connector.Error as err:
         print("ERROR: {}\n".format(err))
