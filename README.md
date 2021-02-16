@@ -14,30 +14,34 @@ cmds:
 
 Create Table:
 
-eg.: @create table
+@create table
 
 Add rows/records:
 
-eg: @table-name add 69 rows
+@table-name add 69 rows
 
-eg: @table-name add 69 stuff
+@table-name add 69 stuff
 
-eg: @table-name add 69
+@table-name add 69
 
-eg: @table-name add //to add indefinetely until '' value is given to a field. 
+@table-name add //to add indefinetely until '' value is given to a field. 
 
 Echo/Select:
 
-eg: @table-name echo //shows full table
+@table-name echo //shows full table
 
-eg: @table-name echo field1, field2,.... clause 1, clause 2,.... // select ki copy
+@table-name echo field1, field2,.... clause 1, clause 2,.... // select ki copy
 
-eg: @table-name select //shows full table
+@table-name select //shows full table
 
-eg: @table-name select field1, field2,.... clause 1, clause 2,.... // aakhir kyun bnaya ye?
+@table-name select field1, field2,.... clause 1, clause 2,.... // aakhir kyun bnaya ye?
 
 Delete:
 
-eg: @table-name delete [column] [value] //deletes records with specified column values
+@table-name delete [column] [value] //deletes records with specified column values
 
-like: @emp delete empid 69420 
+eg: @emp delete empid 69420 
+
+Update:
+
+@table-name update [condition/position] set [field1] = [value1], [field2] = [value2]....
