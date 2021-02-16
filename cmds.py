@@ -119,11 +119,11 @@ def ECHO(args = ['*']):
 
 
 commands = {
-               "create table": CREATE_TABLE,
-               "add": ADD_RECORDS,
-               "delete": DELETE,
-               "select": ECHO,
-               "echo": ECHO
+               "CREATE TABLE": CREATE_TABLE,
+               "ADD": ADD_RECORDS,
+               "DELETE": DELETE,
+               "SELECT": ECHO,
+               "ECHO": ECHO
            }
 
 cursor = None
