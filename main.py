@@ -30,28 +30,43 @@ cmds.cursor = cursor
 
 pad   = ">>> "
 query = ""
-
+context = ''
 while 1:
     query += input(pad)
-    
+
+    if(context and query[0] != '@'):
+        query = '@'+context+' '+query.strip()
+    else:
+        query = query.strip()
+
     if not query:
         continue
     
     if (query[-1] != ';'):
         if(query[0] == '@'):
+            if(query[-1] in ('.', '\\', '@')):
+                context = ''
+                pad = '>>>'
+                query = ''
+                continue
             query = query[1:]
             cmd = cmds.COMMAND(query)
             if(cmd):
                 query = cmd
-            else:
-                try:
-                    eval(query)
-                    print()
-                    continue
-                except:
+                if(cmd[0] == 'context'):
                     query = ''
+                    context = cmd[1]
+                    pad = '@{0}: '.format(context)
                     continue
-                
+            else:
+                query = ''
+                continue
+        elif(query[0] == '>'):
+            try:
+                eval(query)
+            except Exception as e:
+                print('ERROR:',e)
+                print()
                 
         elif (query in ("exit, q, quit")):
             break
@@ -68,7 +83,6 @@ while 1:
         
     try:
         cursor.execute(query)
-        #connection.commit()
         query = ""
     except mysql.connector.Error as err:
         print("ERROR: {}\n".format(err))

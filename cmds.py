@@ -86,8 +86,17 @@ def ADD_RECORDS(args = ['0']):
     print()
     return query
 
-def DELETE(condition):
-    condition = "{0} = \'{1}\'".format(condition[0], condition[1])
+def DELETE(q):
+    q = ' '.join(q)
+    q = q.split(',')
+    conditions = []
+    for i in q:
+        if('=' not in i):
+            i = (i.strip()).split(' ')
+            conditions.append(i[0] + ' = ' + i[1])
+        else:
+            conditions.append(i.strip())
+    condition = ' and '.join(conditions)
     query = "DELETE FROM {0} WHERE {1};".format(table, condition)
     print('->', query)
     print()
@@ -108,18 +117,24 @@ def UPDATE(args):
     query = "UPDATE {0} SET {1} WHERE {2};".format(table, value, condition)
     return query
 
+def DROP():
+    query = "DROP TABLE {0}".format(table)
+    return query
+
 def ECHO(args = ['*']):
     clauses = ('WHERE', 'HAVING', 'GROUP BY', 'ORDER BY')
     args = ' '.join(args)
     args = args.split(',')
     args = ' '.join(args)
+    args = ' '.join(args.split())
     args = args.upper()
     for clause in clauses:
         if(args.find(clause) != -1):
             args = args.split(clause)
             break
-    
-    fields = (args[0].strip()).split()
+    else:
+        args = (args,)
+    fields = (args[0].strip()).split(' ')
     fields = ', '.join(fields)
     if(not fields.strip()):
         fields = '*'
@@ -133,7 +148,7 @@ def ECHO(args = ['*']):
         query = "SELECT {1} FROM {0} {2} {3};".format(table, fields, clause, conditions)
     else:
         query = "SELECT {1} FROM {0};".format(table, fields)
-        
+    #print('->', query)
     return query
 
 
@@ -143,7 +158,8 @@ commands = {
                "DELETE": DELETE,
                "SELECT": ECHO,
                "ECHO": ECHO,
-               "UPDATE": UPDATE
+               "UPDATE": UPDATE,
+               "DROP": DROP
            }
 
 cursor = None
@@ -160,24 +176,46 @@ def COMMAND(cmd):
 
     if(cmd.upper() not in commands.keys()):
         cmd = cmd.split()
+        table = cmd[0]
+        if(len(cmd)==1):
+            return SetContext(table)
+    
         try:
-            table = cmd[0]
-            try:
-                args = cmd[2:]
-            except:
-                args = 0
-            cmd = (cmd[1]).upper()
+            args = cmd[2:]
+        except:
+            args = 0
+        cmd = (cmd[1]).upper()
+        try:
             if(args):
                 query = commands[cmd](args)
             else:
                 query = commands[cmd]()
-            table = None
-            return query
-        except:
-            table = None
-            print('Unidentified external command\n')
-            return 0
+        except Exception as e:
+            print('Error: Unknown external command.\n')
+            query = 0
+        table = None
+        return query
+    
     else:
         query = commands[cmd.upper()]()
         return query
 
+def SetContext(table):
+    db = None
+    if('.' in table):
+        table = table.split('.')
+        db = table[0].upper()
+        table = table[1].upper()
+    
+    if(not db):
+        execute('show tables')
+        db = cursor.column_names[0].split('_')[-1]
+    else:
+        execute('show tables in {0}'.format(db))
+    tables = cursor.fetchall()
+    if (table,) in tables:
+        print('context {0} set.\n'.format(table))
+        return ('context', db+'.'+table)
+    else:
+        print('no table {0} exists in {1}.\n'.format(table, db))
+        return 0
