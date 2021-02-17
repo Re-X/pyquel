@@ -54,4 +54,4 @@ you can set any table as current context with
 
 and then run above commands without '@table-name'
 
-you get out of current context just enter '.' or '\'
+you get out of current context just enter '.' or '\\'
