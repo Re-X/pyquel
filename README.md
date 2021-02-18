@@ -38,7 +38,7 @@ Echo/Select:
 
 Delete:
 
-@table-name delete [column1] = [value1], [column2] = [value2].... //deletes records with specified column values, works with '=' as well
+@table-name delete [column1] = [value1], [column2] = [value2].... //deletes records with specified column values, works without '=' as well
 
 eg: @emp delete empid 69420 
 
