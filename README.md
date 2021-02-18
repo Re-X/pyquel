@@ -62,5 +62,9 @@ enter cmds with prefix '!'
 
 eg: !net start mysql80
 
+eg: !python //to literally run python, exit with exit()
+
 To run as admin: 
 !admin
+
+
