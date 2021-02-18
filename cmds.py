@@ -1,11 +1,9 @@
 import mysql.connector
 
 def CREATE_TABLE():
-    global table
     print()
     query = "CREATE TABLE "
-    if(not table):
-        query += input("Table name: ")
+    query += input("Table name: ")
         
     query += "( "
     try:
@@ -168,8 +166,10 @@ table = None
 def execute(query):
     try:
         cursor.execute(query)
+        return 1
     except mysql.connector.Error as err:
         print("ERROR: {}\n".format(err))
+        return 0
     
 def COMMAND(cmd):
     global table
@@ -208,7 +208,9 @@ def SetContext(table):
         table = table[1].upper()
     
     if(not db):
-        execute('show tables')
+        v = execute('show tables')
+        if(not v):
+            return 0
         db = cursor.column_names[0].split('_')[-1]
     else:
         execute('show tables in {0}'.format(db))

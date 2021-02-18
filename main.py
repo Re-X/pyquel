@@ -43,6 +43,16 @@ while 1:
         continue
     
     if (query[-1] != ';'):
+        if(query[0] == '!'):
+            if(query == '!admin'):
+                runAsAdmin()
+                query = ''
+                continue
+            else:
+                os.system(query[1:])
+                print()
+                query = ''
+                continue
         if(query[0] == '@'):
             if(query[-1] in ('.', '\\', '@')):
                 context = ''
@@ -79,7 +89,12 @@ while 1:
             pad = " "*8 + "-> "
             continue
     else:
-        pad = ">>> "
+        if(context):
+            context = ''
+            query = ''
+            pad = '>>> '
+            continue
+        pad = '>>> '
         
     try:
         cursor.execute(query)
