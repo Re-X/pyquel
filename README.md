@@ -62,5 +62,5 @@ enter cmds with prefix '!'
 
 eg: !net start mysql80
 
-To run admin: 
+To run as admin: 
 !admin
