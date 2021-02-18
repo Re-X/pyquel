@@ -55,3 +55,12 @@ you can set any table as current context with
 and then run above commands without '@table-name'
 
 to get out of current context just enter '.' or '\\'
+
+To use system commands:
+
+enter cmds with prefix '!'
+
+eg: !net start mysql80
+
+To run admin: 
+!admin
