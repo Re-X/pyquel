@@ -38,7 +38,7 @@ Echo/Select:
 
 Delete:
 
-@table-name delete [column1] = [value1], [column2] = [value2].... //deletes records with specified column values, works with '=' as well
+@table-name delete [column1] = [value1], [column2] = [value2].... //deletes records with specified column values, works without '=' as well
 
 eg: @emp delete empid 69420 
 
@@ -55,3 +55,16 @@ you can set any table as current context with
 and then run above commands without '@table-name'
 
 to get out of current context just enter '.' or '\\'
+
+To use system commands:
+
+enter cmds with prefix '!'
+
+eg: !net start mysql80
+
+eg: !python //to literally run python, exit with exit()
+
+To run as admin: 
+!admin
+
+
