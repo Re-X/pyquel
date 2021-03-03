@@ -102,17 +102,12 @@ def DELETE(q):
 
 def UPDATE(args):
     args = ' '.join(args)
-    args = args.split(',')
-    if(len(args)>1):
-        condition = ' and '.join(args[:-1])
-        args = (args[-1]).split('set')
-        condition += ' and ' + args[0]
-    else:
-        args = (args[-1]).split('set')
-        condition = args[0]
-        
+    args = args.split('set')
+    condition = (args[0].strip()).split(',')
+    condition = 'and'.join(condition)
     value = args[1].strip()
     query = "UPDATE {0} SET {1} WHERE {2};".format(table, value, condition)
+    print('->', query)
     return query
 
 def DROP():
@@ -191,7 +186,7 @@ def COMMAND(cmd):
             else:
                 query = commands[cmd]()
         except Exception as e:
-            print('Error: Unknown external command.\n')
+            print('Error: Unknown external command.\n', e)
             query = 0
         table = None
         return query

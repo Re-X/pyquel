@@ -53,7 +53,7 @@ while 1:
                 print()
                 query = ''
                 continue
-        if(query[0] == '@'):
+        elif(query[0] == '@'):
             if(query[-1] in ('.', '\\', '@')):
                 context = ''
                 pad = '>>>'
@@ -71,12 +71,6 @@ while 1:
             else:
                 query = ''
                 continue
-        elif(query[0] == '>'):
-            try:
-                eval(query)
-            except Exception as e:
-                print('ERROR:',e)
-                print()
                 
         elif (query in ("exit, q, quit")):
             break
