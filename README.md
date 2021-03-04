@@ -26,6 +26,10 @@ Add rows/records:
 
 @table-name add //to add indefinetely until '' value is given to a field. 
 
+To add records from another text file (comma separated values):
+
+@table-name add csv [filepath]
+
 Echo/Select:
 
 @table-name echo //shows full table
@@ -38,13 +42,17 @@ Echo/Select:
 
 Delete:
 
-@table-name delete [column1] = [value1], [column2] = [value2].... //deletes records with specified column values, works without '=' as well
+@table-name delete [condition(s)] //deletes records with specified column values, works without '=' as well
 
-eg: @emp delete empid 69420 
+eg: @emp delete empid = 69420 
 
 Update:
 
-@table-name update [condition/position] set [field1] = [value1], [field2] = [value2]....
+@table-name update [condition(s)/position(s)] set [field1] = [value1], [field2] = [value2]....
+
+Truncate:
+
+@table-name truncate
 
 Setting context:
 
