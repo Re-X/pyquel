@@ -33,13 +33,12 @@ def CREATE_TABLE():
         query += ", FOREIGN KEY ({0}) REFERENCES {1}({0})".format(foreign_key, ref)
 
     query += ");"
-    print("->", query)
-    print()
     return query
 
 def ADD_RECORDS(args = ['0']):
     global table
-
+    if(str(args[0]).upper() == 'CSV'):
+        return ADD_CSV(args[1])
     try:
         n = int(args[0])
     except:
@@ -78,48 +77,43 @@ def ADD_RECORDS(args = ['0']):
             query += ", "
         query += values
         k+=1
-        
-    query += ';'
-    print("->", query)
+
     print()
+    query += ';'
     return query
 
-def DELETE(q):
-    q = ' '.join(q)
-    q = q.split(',')
-    conditions = []
-    for i in q:
-        if('=' not in i):
-            i = (i.strip()).split(' ')
-            conditions.append(i[0] + ' = ' + i[1])
-        else:
-            conditions.append(i.strip())
-    condition = ' and '.join(conditions)
-    query = "DELETE FROM {0} WHERE {1};".format(table, condition)
-    print('->', query)
-    print()
+def ADD_CSV(filepath):
+    with open(filepath) as f:
+        values = f.read().split('\n')
+        for i in range(len(values)):
+            values[i] = '('+values[i]+')'
+    query = "INSERT INTO {0} VALUES {1};".format(table, ', '.join(values))
+    return query
+
+def DELETE(conditions):
+    conditions = ' '.join(conditions)
+    query = "DELETE FROM {0} WHERE {1};".format(table, conditions)
     return query
 
 def UPDATE(args):
     args = ' '.join(args)
     args = args.split('set')
-    condition = (args[0].strip()).split(',')
-    condition = 'and'.join(condition)
+    condition = args[0].strip()
     value = args[1].strip()
     query = "UPDATE {0} SET {1} WHERE {2};".format(table, value, condition)
-    print('->', query)
     return query
 
 def DROP():
     query = "DROP TABLE {0}".format(table)
     return query
 
+def TRUNCATE():
+    query = "TRUNCATE TABLE {0};".format(table)
+    return query
+
 def ECHO(args = ['*']):
     clauses = ('WHERE', 'HAVING', 'GROUP BY', 'ORDER BY')
     args = ' '.join(args)
-    args = args.split(',')
-    args = ' '.join(args)
-    args = ' '.join(args.split())
     args = args.upper()
     for clause in clauses:
         if(args.find(clause) != -1):
@@ -128,7 +122,7 @@ def ECHO(args = ['*']):
     else:
         args = (args,)
     fields = (args[0].strip()).split(' ')
-    fields = ', '.join(fields)
+    fields = ' '.join(fields)
     if(not fields.strip()):
         fields = '*'
     try:
@@ -152,9 +146,10 @@ commands = {
                "SELECT": ECHO,
                "ECHO": ECHO,
                "UPDATE": UPDATE,
+               "TRUNCATE": TRUNCATE,
                "DROP": DROP
            }
-
+cmds = commands.keys()
 cursor = None
 table = None
 
@@ -169,26 +164,27 @@ def execute(query):
 def COMMAND(cmd):
     global table
 
-    if(cmd.upper() not in commands.keys()):
+    if(cmd.upper() not in cmds):
         cmd = cmd.split()
         table = cmd[0]
         if(len(cmd)==1):
             return SetContext(table)
-    
-        try:
-            args = cmd[2:]
-        except:
-            args = 0
+        args = cmd[2:]
+
         cmd = (cmd[1]).upper()
+        
+        if(cmd not in cmds):
+            print('ERROR: Unknown external command.\n')
+            return 0
+            
         try:
             if(args):
                 query = commands[cmd](args)
             else:
                 query = commands[cmd]()
         except Exception as e:
-            print('Error: Unknown external command.\n', e)
+            print('Error:', e)
             query = 0
-        table = None
         return query
     
     else:
@@ -199,18 +195,19 @@ def SetContext(table):
     db = None
     if('.' in table):
         table = table.split('.')
-        db = table[0].upper()
-        table = table[1].upper()
+        db = table[0]
+        table = (table[1]).lower()
     
     if(not db):
         v = execute('show tables')
         if(not v):
             return 0
         db = cursor.column_names[0].split('_')[-1]
+        
     else:
         execute('show tables in {0}'.format(db))
     tables = cursor.fetchall()
-    if (table,) in tables:
+    if (table.lower(),) in tables:
         print('context {0} set.\n'.format(table))
         return ('context', db+'.'+table)
     else:

@@ -40,9 +40,12 @@ def runAsAdmin(cmdLine=None, wait=False):
     exit()
 
 def echo(cursor):
-    print('\n')
-    
-    data = cursor.fetchall()
+    try:
+        data = cursor.fetchall()
+    except Exception as e:
+        print("ERROR:", e, end = '\n\n')
+        return 0
+
     columns = cursor.column_names
 
     widths = list(map(len, (col for col in columns)))
@@ -59,6 +62,7 @@ def echo(cursor):
         tavnit += " %-"+"%ss |" % (w,)
         separator += '-'*w + '--+'
 
+    print('\n')
     print(separator)
     print(tavnit % tuple(columns))
     print(separator)

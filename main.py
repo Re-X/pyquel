@@ -68,6 +68,7 @@ while 1:
                     context = cmd[1]
                     pad = '@{0}: '.format(context)
                     continue
+                print('->',query,end = '\n\n')
             else:
                 query = ''
                 continue
@@ -100,6 +101,6 @@ while 1:
       
     if(cursor.with_rows):
         T0 = now()
-        echo(cursor)
-        print("-> executed in {0} secs.\n".format(now()-T0))
+        if(echo(cursor)):
+            print("-> executed in {0} secs.\n".format(now()-T0))
 
