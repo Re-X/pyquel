@@ -2,7 +2,6 @@ import mysql.connector
 from mysql.connector import errorcode
 
 def Connect():
-    global config
     global mysql_version
     
     while 1:
