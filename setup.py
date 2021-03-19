@@ -9,7 +9,6 @@ def Connect():
         print('\n')
         user = input("Enter username: ")
         password = input("Enter password: ")
-        config['password'] = password
         host = input("Enter host : ")        
         try:
             connection = mysql.connector.connect(username = user, password = password, host = host)
