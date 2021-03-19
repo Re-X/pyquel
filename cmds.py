@@ -191,6 +191,7 @@ def COMMAND(cmd):
         query = commands[cmd.upper()]()
         return query
 
+
 def SetContext(table):
     db = None
     if('.' in table):
@@ -213,3 +214,36 @@ def SetContext(table):
     else:
         print('no table {0} exists in {1}.\n'.format(table, db))
         return 0
+
+
+def echo(cursor):
+    try:
+        data = cursor.fetchall()
+    except Exception as e:
+        print("ERROR:", e, end = '\n\n')
+        return 0
+
+    columns = cursor.column_names
+
+    widths = list(map(len, (col for col in columns)))
+
+    for i in data:
+        for j in range(len(i)):
+            if widths[j] < len(str(i[j])):
+                widths[j] = len(str(i[j]))
+                
+    tavnit = ' |'
+    separator = ' +' 
+
+    for w in widths:
+        tavnit += " %-"+"%ss |" % (w,)
+        separator += '-'*w + '--+'
+
+    print('\n')
+    print(separator)
+    print(tavnit % tuple(columns))
+    print(separator)
+    for row in data:
+        print(tavnit % row)
+    print(separator)
+    print('\n')

@@ -14,7 +14,6 @@ from time import perf_counter as now
 import mysql.connector
 
 import setup
-from libs import *
 import cmds
 
 connection = setup.Connect()
@@ -44,15 +43,10 @@ while 1:
     
     if (query[-1] != ';'):
         if(query[0] == '!'):
-            if(query == '!admin'):
-                runAsAdmin()
-                query = ''
-                continue
-            else:
-                os.system(query[1:])
-                print()
-                query = ''
-                continue
+            os.system(query[1:])
+            print()
+            query = ''
+            continue
         elif(query[0] == '@'):
             if(query[-1] in ('.', '\\', '@')):
                 context = ''
@@ -101,6 +95,6 @@ while 1:
       
     if(cursor.with_rows):
         T0 = now()
-        if(echo(cursor)):
+        if(cmds.echo(cursor)):
             print("-> executed in {0} secs.\n".format(now()-T0))
 
