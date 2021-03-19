@@ -23,7 +23,7 @@ os.system("CLS")
 
 cursor = connection.cursor()
 
-print("connected to MySQL server on", setup.config['host'], '\n\n')
+print("connected to MySQL server on", setup.host, '\n\n')
 
 cmds.cursor = cursor
 
