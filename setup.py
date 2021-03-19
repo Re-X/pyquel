@@ -1,8 +1,13 @@
 import mysql.connector
 from mysql.connector import errorcode
 
-setup_config = (open('setup.config')).read()
-exec(setup_config)
+config = {
+  'username': 'root',
+  'password': 'root',
+  'host': '127.0.0.1',
+  'port': 3306,
+  'raise_on_warnings': True
+}
 
 def Connect():
     global config
